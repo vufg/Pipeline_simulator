@@ -178,6 +178,7 @@ void excution(void){
                              {0,1}, {0,1}, {0,1},
                              //jr: do nothing in EX stage
                              {0,0},
+                             //MULT MULTU
                              {1,1}, {1,1},
                              {0,0}, {0,0},
                              //I type instruction
@@ -217,7 +218,8 @@ void excution(void){
             EX_rs_forwarding_tag = DM_WB_forwarding;
             IDEX_num1 = reg[rs];
 
-    }else if(rsrt_array[optype][1] &&
+    }
+    if(rsrt_array[optype][1] &&
         ((rt == get_rd(WB) && get_ins_type(WB) >= ADD && get_ins_type(WB) <= SRA) ||
         (rt == get_rd(WB) && get_ins_type(WB) >= MFHI && get_ins_type(WB) <= MFLO) ||
         (rt == get_rt(WB) && get_ins_type(WB) >= ADDI && get_ins_type(WB) <= LBU) ||
@@ -237,11 +239,9 @@ void excution(void){
         (rs == 31 && get_ins_type(DM) == JAL) )){
         EX_rs_forwarding_tag = EX_DM_forwarding;
         IDEX_num1 = DMWB_result_buffer;
+    }
 
-
-
-
-    }else if(rsrt_array[optype][1] &&
+    if(rsrt_array[optype][1] &&
         ((rt == get_rd(DM) && get_ins_type(DM) >= ADD && get_ins_type(DM) <= SRA) ||
         (rt == get_rd(DM) && get_ins_type(DM) >= MFHI && get_ins_type(DM) <= MFLO) ||
         (rt == get_rt(DM) && get_ins_type(DM) >= ADDI && get_ins_type(DM) <= ADDIU) ||
@@ -325,9 +325,12 @@ void excution(void){
 	    }
 	    mul_changed = 1;
 	    long long ans;
+	    int tmp;
 	    ans = IDEX_num1 * IDEX_num2;
-	    hi_access( (int)(ans >> 32) , 1);
-	    lo_access( (int)(ans << 32 >> 32) , 1);
+	    tmp = ans >> 32;
+	    hi_access( tmp, 1);
+	    tmp = ans;
+	    lo_access( tmp, 1);
         break;
 
     case MULTU:
@@ -364,7 +367,7 @@ void excution(void){
         break;
 
     case ADDIU:
-        EXDM_result_buffer = IDEX_num1 + get_immediate_unsigned(EX);
+        EXDM_result_buffer = IDEX_num1 + get_immediate_signed(EX);
 
         break;
 
@@ -517,12 +520,20 @@ void instruction_decoder(void){
     rt = get_rt(ID);
 
     //detect stall
+    /*
+    if(cycle == 2){
+        printf("%0x%08X\n", ID);
+        printf("rs: %d rt: %d\n", rs, rt);
+        printf("%0x%08X\n", EX);
+        printf("%d \n", get_ins_type()
+    }
+    */
     if(rsrt_array[optype][0] &&
-       rs == get_rd(EX) && get_ins_type(EX) >= LW && get_ins_type(EX) <= LBU ){
+       rs == get_rt(EX) && get_ins_type(EX) >= LW && get_ins_type(EX) <= LBU ){
         stall_this_cycle = 1;
 
     }else if(rsrt_array[optype][1] &&
-       rt == get_rd(EX) && get_ins_type(EX) >= LW && get_ins_type(EX) <= LBU ){
+       rt == get_rt(EX) && get_ins_type(EX) >= LW && get_ins_type(EX) <= LBU ){
         stall_this_cycle = 1;
 
     //detect stall in branch instructions

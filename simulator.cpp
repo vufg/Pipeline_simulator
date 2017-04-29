@@ -22,11 +22,12 @@ void simulator(void){
         instruction_decoder();
         instruction_fetch();
 
+        cycle++;
         output_snapshot_ins();
         output_errordump();
 
 
-        cycle++;
+
         if(pc_ID != pc_IF){
             pc_changed = 1;
         }else{

@@ -47,6 +47,7 @@ void input_data_file(void){
 
     fread(&inst, sizeof(unsigned int), 1, iimage_file);
     pc_IF = change_endian(inst);
+    pc_ID = change_endian(inst);
     fread(&inst, sizeof(unsigned int), 1, iimage_file);
     num_iimage = change_endian(inst);
     for(unsigned int ii = 0; ii < num_iimage; ii++){
