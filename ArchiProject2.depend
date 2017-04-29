@@ -58,7 +58,7 @@
 	"ins_decoder.h"
 	"io.h"
 
-1493474163 source:c:\users\zhufeng\desktop\pipeline_simulator\io.cpp
+1493474552 source:c:\users\zhufeng\desktop\pipeline_simulator\io.cpp
 	<stdio.h>
 	<string.h>
 	"io.h"
@@ -76,6 +76,6 @@
 	"io.h"
 	"five_stages.h"
 
-1493472716 source:c:\users\zhufeng\desktop\pipeline_simulator\simulator.cpp
+1493474472 source:c:\users\zhufeng\desktop\pipeline_simulator\simulator.cpp
 	"simulator.h"
 

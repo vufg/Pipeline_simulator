@@ -144,8 +144,8 @@ int register_acess(int address, int value, int write_enable){
         return 0;
     }
     if(write_enable){
-        printf("cycle: %d\n",cycle);
-        printf("address: %d\n",address);
+        //printf("cycle: %d\n",cycle);
+        //printf("address: %d\n",address);
         if(reg[address] != value){
             reg_changed[address] = 1;
             reg[address] = value;

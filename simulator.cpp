@@ -11,11 +11,11 @@ void simulator(void){
     //pc_ID = 4;
     while(quit_flag < 5){
 
-
+        pc_IF = pc_ID;
         output_snapshot_reg();
         quit_flag = 0;
 
-        pc_IF = pc_ID;
+
         write_back();
         data_memory();
         excution();
