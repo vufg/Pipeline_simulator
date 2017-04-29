@@ -44,7 +44,10 @@ int lo_access(int value, int write_enable);
 
 
 void output_errordump(void);
-void output_snapshot(void);
+
+void output_snapshot_ins(void);
+void output_snapshot_reg(void);
+
 int overflow_f(int a, int b);
 int lo_access(int value, int write_enable);
 int hi_access(int value, int write_enable);

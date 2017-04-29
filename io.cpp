@@ -144,6 +144,8 @@ int register_acess(int address, int value, int write_enable){
         return 0;
     }
     if(write_enable){
+        printf("cycle: %d\n",cycle);
+        printf("address: %d\n",address);
         if(reg[address] != value){
             reg_changed[address] = 1;
             reg[address] = value;
@@ -197,7 +199,7 @@ int overflow_f(int a, int b){
 }
 
 
-void output_snapshot(void){
+void output_snapshot_reg(void){
     fprintf(snapshot, "cycle %d\n", cycle);
     int no_change = 1;
     for(int i = 0; i < 32; i++)
@@ -222,7 +224,9 @@ void output_snapshot(void){
         fprintf(snapshot, "PC: 0x%08X\n", pc_IF);
         pc_changed = 0;
     }
+}
 
+void output_snapshot_ins(void){
     //IF stage
     fprintf(snapshot, "IF: 0x%08X", IF);
     if(stall_this_cycle){
@@ -233,7 +237,6 @@ void output_snapshot(void){
     fprintf(snapshot, "\n");
 
 
-    get_ins_type(ID);
 
     //ID stage
     fprintf(snapshot, "ID: %s", ins_type_string[get_ins_type(ID)]);
@@ -254,7 +257,7 @@ void output_snapshot(void){
     }
 
     if(ID_rt_forwarding_tag == EX_DM_forwarding){
-        fprintf(snapshot, " %s_rt_$", forwarding_type_string[ID_rs_forwarding_tag]);
+        fprintf(snapshot, " %s_rt_$", forwarding_type_string[ID_rt_forwarding_tag]);
         if(get_ins_type(DM) <= MFLO){
             //J-type instruction
             fprintf(snapshot, "%d", get_rd(DM));
@@ -296,6 +299,7 @@ void output_snapshot(void){
     fprintf(snapshot, "\n");
 
     fprintf(snapshot, "\n\n");
+
 }
 
 void output_errordump(void){

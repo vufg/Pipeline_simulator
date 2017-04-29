@@ -67,6 +67,8 @@ void data_memory(void){
 
     //get data from EX/DM buffer
     DM = EX_DM;
+    //printf("DM stage\n\n");
+    //printf("%s \n\n", DM);
     optype = get_ins_type(DM);
 
     //R type instruction $d = execution_result from EX stage
@@ -476,7 +478,7 @@ void excution(void){
     }
 
     //store data into DM/WB buffer
-    DM_WB = EX_DM;// DW_WB = DM
+    EX_DM = EX;
 
 
 
@@ -577,11 +579,17 @@ void instruction_decoder(void){
     }
 
 
-        if(stall_this_cycle){
-            //insert NOP
-            ID_EX = 0x00000000;
-            return ;
-        }
+
+
+
+
+    if(stall_this_cycle){
+        //insert NOP
+        ID_EX = 0x00000000;
+        return ;
+    }
+
+    //printf("cycle: %d\n", cycle);
 
 
 
@@ -851,13 +859,13 @@ void instruction_decoder(void){
 }
 
 void instruction_fetch(void){
-    if(stall_this_cycle){
-        return ;
-    }
     IF = imemory[pc_IF / 4];
     if(get_ins_type(IF) == HALT){
         quit_flag++;
     }
-    IF_ID = IF;
+    if(stall_this_cycle == 0){
+        IF_ID = IF;
+    }
+
     return ;
 }

@@ -6,17 +6,33 @@
 
 void simulator(void){
 
+    //IF = imemory[pc_IF / 4];
+    //IF_ID = IF;
+    //pc_ID = 4;
     while(quit_flag < 5){
+
+
+        output_snapshot_reg();
         quit_flag = 0;
+
+        pc_IF = pc_ID;
         write_back();
         data_memory();
         excution();
         instruction_decoder();
         instruction_fetch();
+
+        output_snapshot_ins();
         output_errordump();
-        output_snapshot();
+
+
         cycle++;
-        pc_IF = pc_ID;
+        if(pc_ID != pc_IF){
+            pc_changed = 1;
+        }else{
+            pc_changed = 0;
+        }
+        //pc_IF = pc_ID;
     }
 
 }
