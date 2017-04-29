@@ -16,6 +16,7 @@ void simulator(void){
         output_errordump();
         output_snapshot();
         cycle++;
+        pc_IF = pc_ID;
     }
 
 }

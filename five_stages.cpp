@@ -115,6 +115,8 @@ void data_memory(void){
         case LBU:
             mem_data = ((unsigned int)dmemory_acess(EXDM_result_buffer, 0, 1, 0)) << 24 >> 24;
             break;
+        default:
+            break;
         }
         DMWB_result_buffer = mem_data;
     }
@@ -132,6 +134,9 @@ void data_memory(void){
 
         case SB:
             dmemory_acess(EXDM_mem_address_buffer, EXDM_result_buffer & 0x000000FF, 1, 1);
+            break;
+
+        default:
             break;
         }
 
@@ -183,8 +188,8 @@ void excution(void){
                              {0,0}, {0,0}, {0,0},
                              {0,0}, {0,0}, {0,0}, {0,0}
                              };
-    insType optype, WB_optype, DM_optype;
     int rs, rt, shamt;
+    insType optype;
 
     //get data from ID/EX buffer
     EX = ID_EX;
@@ -202,20 +207,20 @@ void excution(void){
 
     //check DM_WB_forwarding first
     if(rsrt_array[optype][0] &&
-        (rs == get_rd(WB) && get_ins_type(WB) >= ADD && get_ins_type(WB) <= SRA) ||
+        ((rs == get_rd(WB) && get_ins_type(WB) >= ADD && get_ins_type(WB) <= SRA) ||
         (rs == get_rd(WB) && get_ins_type(WB) >= MFHI && get_ins_type(WB) <= MFLO) ||
         (rs == get_rt(WB) && get_ins_type(WB) >= ADDI && get_ins_type(WB) <= LBU) ||
         (rs == get_rt(WB) && get_ins_type(WB) >= LUI && get_ins_type(WB) <= SLTI) ||
-        (rs == 31 && get_ins_type(WB) == JAL) ){
+        (rs == 31 && get_ins_type(WB) == JAL) )){
             EX_rs_forwarding_tag = DM_WB_forwarding;
             IDEX_num1 = reg[rs];
 
     }else if(rsrt_array[optype][1] &&
-        (rt == get_rd(WB) && get_ins_type(WB) >= ADD && get_ins_type(WB) <= SRA) ||
+        ((rt == get_rd(WB) && get_ins_type(WB) >= ADD && get_ins_type(WB) <= SRA) ||
         (rt == get_rd(WB) && get_ins_type(WB) >= MFHI && get_ins_type(WB) <= MFLO) ||
         (rt == get_rt(WB) && get_ins_type(WB) >= ADDI && get_ins_type(WB) <= LBU) ||
         (rt == get_rt(WB) && get_ins_type(WB) >= LUI && get_ins_type(WB) <= SLTI) ||
-        (rt == 31 && get_ins_type(WB) == JAL) ){
+        (rt == 31 && get_ins_type(WB) == JAL) )){
         EX_rt_forwarding_tag = DM_WB_forwarding;
         IDEX_num2 = reg[rt];
     }
@@ -495,11 +500,12 @@ void instruction_decoder(void){
                              {0,0}, {0,0}, {0,0}, {0,0}
                              };
 
-    insType optype, WB_optype, DM_optype;
-    int rs, rt, shamt;
+
+    int rs, rt;
 
     // only for conditional branch instructions
     int reg_rs, reg_rt;
+    insType optype;
 
 
     //get data from ID/EX buffer
@@ -507,7 +513,6 @@ void instruction_decoder(void){
     optype = get_ins_type(ID);
     rs = get_rs(ID);
     rt = get_rt(ID);
-    shamt = get_shamt(ID);
 
     //detect stall
     if(rsrt_array[optype][0] &&
@@ -853,9 +858,6 @@ void instruction_fetch(void){
     if(get_ins_type(IF) == HALT){
         quit_flag++;
     }
-    get_ins_type(IF);
-    pc_IF = pc_ID;
-
     IF_ID = IF;
     return ;
 }

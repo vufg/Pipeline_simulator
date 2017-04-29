@@ -39,3 +39,43 @@
 1493450036 source:c:\users\zhufeng\desktop\archiproject2\simulator.cpp
 	"simulator.h"
 
+1493451991 source:c:\users\zhufeng\desktop\pipeline_simulator\five_stages.cpp
+	"five_stages.h"
+	"ins_decoder.h"
+	<stdint.h>
+
+1493449775 c:\users\zhufeng\desktop\pipeline_simulator\five_stages.h
+	<stdio.h>
+	"io.h"
+
+1493449987 c:\users\zhufeng\desktop\pipeline_simulator\io.h
+	<stdio.h>
+
+1493445681 c:\users\zhufeng\desktop\pipeline_simulator\ins_decoder.h
+	"io.h"
+
+1493449813 source:c:\users\zhufeng\desktop\pipeline_simulator\ins_decoder.cpp
+	"ins_decoder.h"
+	"io.h"
+
+1493449987 source:c:\users\zhufeng\desktop\pipeline_simulator\io.cpp
+	<stdio.h>
+	<string.h>
+	"io.h"
+	"ins_decoder.h"
+
+1493451007 source:c:\users\zhufeng\desktop\pipeline_simulator\main.cpp
+	<stdio.h>
+	<stdlib.h>
+	"io.h"
+	"five_stages.h"
+	"simulator.h"
+	"ins_decoder.h"
+
+1493450024 c:\users\zhufeng\desktop\pipeline_simulator\simulator.h
+	"io.h"
+	"five_stages.h"
+
+1493451623 source:c:\users\zhufeng\desktop\pipeline_simulator\simulator.cpp
+	"simulator.h"
+
