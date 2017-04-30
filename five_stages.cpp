@@ -537,7 +537,7 @@ void instruction_decoder(void){
         stall_this_cycle = 1;
 
     //detect stall in branch instructions
-    }else if(optype >= BEQ && optype <= BGTZ){
+    }else if( (optype >= BEQ && optype <= BGTZ) || (optype == JR)){
         if(rsrt_array[optype][0] &&
           ((rs == get_rd(EX) && get_ins_type(EX) >= ADD && get_ins_type(EX) <= SRA) ||
            (rs == get_rd(EX) && get_ins_type(EX) >= MFHI && get_ins_type(EX) <= MFLO) ||
@@ -566,7 +566,7 @@ void instruction_decoder(void){
         reg_rt = reg[rt];
 
         //forwarding in ID stage
-        if(optype >= BEQ && optype <= BGTZ){
+        if((optype >= BEQ && optype <= BGTZ) || (optype == JR)){
             if(rsrt_array[optype][0] &&
                 ((rs == get_rd(DM) && get_ins_type(DM) >= ADD && get_ins_type(DM) <= SRA) ||
                 (rs == get_rd(DM) && get_ins_type(DM) >= MFHI && get_ins_type(DM) <= MFLO) ||
@@ -793,6 +793,7 @@ void instruction_decoder(void){
             overflow_f(pc_ID, get_immediate_signed(ID) << 2);
             if(target_pc != pc_IF){
                 IF_to_be_flushed = 1;
+
             }
             pc_ID = target_pc;
         }
@@ -805,6 +806,7 @@ void instruction_decoder(void){
             overflow_f(pc_ID, get_immediate_signed(ID) << 2);
             if(target_pc != pc_IF){
                 IF_to_be_flushed = 1;
+
             }
             pc_ID = target_pc;
         }
@@ -817,6 +819,7 @@ void instruction_decoder(void){
             overflow_f(pc_ID, get_immediate_signed(ID) << 2);
             if(target_pc != pc_IF){
                 IF_to_be_flushed = 1;
+
             }
             pc_ID = target_pc;
         }
@@ -828,17 +831,19 @@ void instruction_decoder(void){
         target_pc = (pc_ID >> 28 << 28) | (get_address_unsigned(ID) << 2);
         if(target_pc != pc_IF){
                 IF_to_be_flushed = 1;
+
         }
         pc_ID = target_pc;
 
         break;
 
     case JAL:
-        IDEX_num1 = pc_ID;
+        IDEX_num1 = pc_ID - 4;
         //int target_pc;
         target_pc = (pc_ID >> 28 << 28) | (get_address_unsigned(ID) << 2);
         if(target_pc != pc_IF){
                 IF_to_be_flushed = 1;
+
         }
         pc_ID = target_pc;
         //EXDM_result_buffer = IDEX_num1;
@@ -847,9 +852,10 @@ void instruction_decoder(void){
 
     case JR:
         //int target_pc;
-        target_pc = register_acess(rs, 0, 0);
+        target_pc = reg_rs;
         if(target_pc != pc_IF){
                 IF_to_be_flushed = 1;
+
         }
         pc_ID = target_pc;
         break;
@@ -876,6 +882,9 @@ void instruction_fetch(void){
     }
     if(stall_this_cycle == 0){
         IF_ID = IF;
+    }
+    if(IF_to_be_flushed){
+        IF_ID = 0x00000000;
     }
 
     return ;

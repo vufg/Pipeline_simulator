@@ -9,7 +9,7 @@ typedef enum {NO_forwarding, EX_DM_forwarding, DM_WB_forwarding} forwardingType;
 //reg and mem data
 extern int reg[50], imemory[300], dmemory[300];
 extern int pc_IF, pc_ID, hi, lo;
-
+extern int pre_pc;
 //IF buffer data
 extern int IF_ID, ID_EX, EX_DM, DM_WB;
 extern int IF, ID, EX, DM, WB;

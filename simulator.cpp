@@ -23,14 +23,7 @@ void simulator(void){
         instruction_fetch();
 
         cycle++;
-        if(cycle == 21){
-            printf("0x%08X\n", IF);
-            printf("0x%08X\n", ID);
-            printf("0x%08X\n", EX);
-            printf("0x%08X\n", DM);
-            printf("0x%08X\n", WB);
 
-        }
 
         output_snapshot_ins();
         output_errordump();

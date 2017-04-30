@@ -28,11 +28,12 @@ int pc_IF, pc_ID, hi, lo;
 
 //IF buffer data
 int IF_ID, ID_EX, EX_DM, DM_WB;
+
 int IF, ID, EX, DM, WB;
 
 //reg changed markers
 int mul_changed, reg_changed[50], hi_changed, lo_changed, pc_changed;
-
+int pre_pc;
 //other global variable
 int quit_flag, cycle;
 
@@ -66,6 +67,7 @@ void init(void){
 
     pc_IF = 0;
     pc_ID = 0;
+    pre_pc = -1;
 
     hi = 0;
     lo = 0;

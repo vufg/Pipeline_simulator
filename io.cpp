@@ -223,10 +223,16 @@ void output_snapshot_reg(void){
         no_change = 0;
     }
 
-    if(pc_changed || no_change){
-        fprintf(snapshot, "PC: 0x%08X\n", pc_IF);
+    if(pre_pc != pc_IF){
+        pc_changed = 1;
+    }else{
         pc_changed = 0;
     }
+    if(pc_changed || no_change){
+        fprintf(snapshot, "PC: 0x%08X\n", pc_IF);
+    }
+    pre_pc = pc_IF;
+
 }
 
 void output_snapshot_ins(void){
