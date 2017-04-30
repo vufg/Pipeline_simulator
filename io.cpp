@@ -75,8 +75,8 @@ void close_output_file(void){
 //always in unsigned int form
 //all 0 in the left for half word or byte operation
 int dmemory_acess(int address, int value, int len, int write_enable){
-    printf("cycle: %d\n",cycle);
-    printf("%d %d %d\n", address, len);
+    //printf("cycle: %d\n",cycle);
+    //printf("%d %d %d\n", address, len);
     if((address < 0 || address + len - 1 > 1023)||(address % len)){
         if(address < 0 || address + len - 1 > 1023){
             error_report[2] = 1;
@@ -228,9 +228,9 @@ void output_snapshot_reg(void){
     }else{
         pc_changed = 0;
     }
-    if(pc_changed || no_change){
-        fprintf(snapshot, "PC: 0x%08X\n", pc_IF);
-    }
+    //if(pc_changed || no_change){
+    fprintf(snapshot, "PC: 0x%08X\n", pc_IF);
+    //}
     pre_pc = pc_IF;
 
 }

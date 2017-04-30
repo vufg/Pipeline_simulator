@@ -209,7 +209,7 @@ void excution(void){
     //than check EX_DM_forwarding, most recently instructions, latter check
 
     //check DM_WB_forwarding first
-    if(rsrt_array[optype][0] &&
+    if(rsrt_array[optype][0] && rs &&
         ((rs == get_rd(WB) && get_ins_type(WB) >= ADD && get_ins_type(WB) <= SRA) ||
         (rs == get_rd(WB) && get_ins_type(WB) >= MFHI && get_ins_type(WB) <= MFLO) ||
         (rs == get_rt(WB) && get_ins_type(WB) >= ADDI && get_ins_type(WB) <= LBU) ||
@@ -219,7 +219,7 @@ void excution(void){
             IDEX_num1 = reg[rs];
 
     }
-    if(rsrt_array[optype][1] &&
+    if(rsrt_array[optype][1] && rt &&
         ((rt == get_rd(WB) && get_ins_type(WB) >= ADD && get_ins_type(WB) <= SRA) ||
         (rt == get_rd(WB) && get_ins_type(WB) >= MFHI && get_ins_type(WB) <= MFLO) ||
         (rt == get_rt(WB) && get_ins_type(WB) >= ADDI && get_ins_type(WB) <= LBU) ||
@@ -230,7 +230,7 @@ void excution(void){
     }
 
     //check EX_DM_forwarding
-    if(rsrt_array[optype][0] &&
+    if(rsrt_array[optype][0] && rs &&
         ((rs == get_rd(DM) && get_ins_type(DM) >= ADD && get_ins_type(DM) <= SRA) ||
         (rs == get_rd(DM) && get_ins_type(DM) >= MFHI && get_ins_type(DM) <= MFLO) ||
         (rs == get_rt(DM) && get_ins_type(DM) >= ADDI && get_ins_type(DM) <= ADDIU) ||
@@ -241,7 +241,7 @@ void excution(void){
         IDEX_num1 = DMWB_result_buffer;
     }
 
-    if(rsrt_array[optype][1] &&
+    if(rsrt_array[optype][1] && rt &&
         ((rt == get_rd(DM) && get_ins_type(DM) >= ADD && get_ins_type(DM) <= SRA) ||
         (rt == get_rd(DM) && get_ins_type(DM) >= MFHI && get_ins_type(DM) <= MFLO) ||
         (rt == get_rt(DM) && get_ins_type(DM) >= ADDI && get_ins_type(DM) <= ADDIU) ||
@@ -528,17 +528,17 @@ void instruction_decoder(void){
         printf("%d \n", get_ins_type()
     }
     */
-    if(rsrt_array[optype][0] &&
+    if(rsrt_array[optype][0] && rs &&
        rs == get_rt(EX) && get_ins_type(EX) >= LW && get_ins_type(EX) <= LBU ){
         stall_this_cycle = 1;
 
-    }else if(rsrt_array[optype][1] &&
+    }else if(rsrt_array[optype][1] &&  rt &&
        rt == get_rt(EX) && get_ins_type(EX) >= LW && get_ins_type(EX) <= LBU ){
         stall_this_cycle = 1;
 
     //detect stall in branch instructions
     }else if( (optype >= BEQ && optype <= BGTZ) || (optype == JR)){
-        if(rsrt_array[optype][0] &&
+        if(rsrt_array[optype][0] && rs &&
           ((rs == get_rd(EX) && get_ins_type(EX) >= ADD && get_ins_type(EX) <= SRA) ||
            (rs == get_rd(EX) && get_ins_type(EX) >= MFHI && get_ins_type(EX) <= MFLO) ||
            (rs == get_rt(EX) && get_ins_type(EX) >= ADDI && get_ins_type(EX) <= LBU) ||
@@ -549,7 +549,7 @@ void instruction_decoder(void){
             stall_this_cycle = 1;
            }
 
-        if(rsrt_array[optype][1] &&
+        if(rsrt_array[optype][1] && rt &&
           ((rt == get_rd(EX) && get_ins_type(EX) >= ADD && get_ins_type(EX) <= SRA) ||
            (rt == get_rd(EX) && get_ins_type(EX) >= MFHI && get_ins_type(EX) <= MFLO) ||
            (rt == get_rt(EX) && get_ins_type(EX) >= ADDI && get_ins_type(EX) <= LBU) ||
@@ -567,7 +567,7 @@ void instruction_decoder(void){
 
         //forwarding in ID stage
         if((optype >= BEQ && optype <= BGTZ) || (optype == JR)){
-            if(rsrt_array[optype][0] &&
+            if(rsrt_array[optype][0] && rs &&
                 ((rs == get_rd(DM) && get_ins_type(DM) >= ADD && get_ins_type(DM) <= SRA) ||
                 (rs == get_rd(DM) && get_ins_type(DM) >= MFHI && get_ins_type(DM) <= MFLO) ||
                 (rs == get_rt(DM) && get_ins_type(DM) >= ADDI && get_ins_type(DM) <= ADDIU) ||
@@ -577,7 +577,7 @@ void instruction_decoder(void){
                     reg_rs = DMWB_result_buffer;
                 }
 
-            if(rsrt_array[optype][1] &&
+            if(rsrt_array[optype][1] && rt &&
                 ((rt == get_rd(DM) && get_ins_type(DM) >= ADD && get_ins_type(DM) <= SRA) ||
                 (rt == get_rd(DM) && get_ins_type(DM) >= MFHI && get_ins_type(DM) <= MFLO) ||
                 (rt == get_rt(DM) && get_ins_type(DM) >= ADDI && get_ins_type(DM) <= ADDIU) ||
@@ -656,15 +656,15 @@ void instruction_decoder(void){
         break;
 
     case SLL:
-        IDEX_num1 = reg_rt;
+        IDEX_num2 = reg_rt;
         break;
 
     case SRL:
-        IDEX_num1 = reg_rt;
+        IDEX_num2 = reg_rt;
         break;
 
     case SRA:
-        IDEX_num1 = reg_rt;
+        IDEX_num2 = reg_rt;
 
     case MULT:
         IDEX_num1 = reg_rs;
