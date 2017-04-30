@@ -32,7 +32,15 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="five_stages.cpp" />
+		<Unit filename="five_stages.h" />
+		<Unit filename="ins_decoder.cpp" />
+		<Unit filename="ins_decoder.h" />
+		<Unit filename="io.cpp" />
+		<Unit filename="io.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="simulator.cpp" />
+		<Unit filename="simulator.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
