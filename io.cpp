@@ -75,6 +75,8 @@ void close_output_file(void){
 //always in unsigned int form
 //all 0 in the left for half word or byte operation
 int dmemory_acess(int address, int value, int len, int write_enable){
+    printf("cycle: %d\n",cycle);
+    printf("%d %d %d\n", address, len);
     if((address < 0 || address + len - 1 > 1023)||(address % len)){
         if(address < 0 || address + len - 1 > 1023){
             error_report[2] = 1;

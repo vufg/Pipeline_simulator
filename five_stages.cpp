@@ -432,7 +432,7 @@ void excution(void){
         break;
 
     case NORI:
-        EXDM_result_buffer = ~(IDEX_num1 & get_immediate_unsigned(EX));
+        EXDM_result_buffer = ~(IDEX_num1 | get_immediate_unsigned(EX));
 
         break;
 
@@ -789,7 +789,7 @@ void instruction_decoder(void){
     ///instructions related to PC
     case BEQ:
         if(reg_rs == reg_rt){
-            int target_pc = pc_ID + (get_immediate_signed(ID) << 2);
+            int target_pc = pc_ID + (get_immediate_signed(ID) << 2) - 4;
             overflow_f(pc_ID, get_immediate_signed(ID) << 2);
             if(target_pc != pc_IF){
                 IF_to_be_flushed = 1;
@@ -801,7 +801,7 @@ void instruction_decoder(void){
 
     case BNE:
         if(reg_rs != reg_rt){
-            int target_pc = pc_ID + (get_immediate_signed(ID) << 2);
+            int target_pc = pc_ID + (get_immediate_signed(ID) << 2) - 4;
             overflow_f(pc_ID, get_immediate_signed(ID) << 2);
             if(target_pc != pc_IF){
                 IF_to_be_flushed = 1;
@@ -813,7 +813,7 @@ void instruction_decoder(void){
 
     case BGTZ:
         if(reg_rs > 0){
-            int target_pc = pc_ID + (get_immediate_signed(ID) << 2);
+            int target_pc = pc_ID + (get_immediate_signed(ID) << 2) - 4;
             overflow_f(pc_ID, get_immediate_signed(ID) << 2);
             if(target_pc != pc_IF){
                 IF_to_be_flushed = 1;
