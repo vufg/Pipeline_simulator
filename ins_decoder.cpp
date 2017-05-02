@@ -6,10 +6,16 @@ int get_rs(int inst){
 }
 
 int get_rt(int inst){
+    if(get_ins_type(inst) == JAL){
+        return 31;
+    }
     return ((unsigned int)inst) << 11 >> 27;
 }
 
 int get_rd(int inst){
+    if(get_ins_type(inst) == JAL){
+        return 31;
+    }
     int opcode = ((unsigned int)inst) >> 26;
     if(opcode){
     //not R type: no rd

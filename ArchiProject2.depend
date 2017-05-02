@@ -79,12 +79,12 @@
 1493537356 source:c:\users\zhufeng\desktop\pipeline_simulator\simulator.cpp
 	"simulator.h"
 
-1493541054 source:c:\users\zhufeng\desktop\architecture project2\pipeline_simulator\five_stages.cpp
+1493739378 source:c:\users\zhufeng\desktop\architecture project2\pipeline_simulator\five_stages.cpp
 	"five_stages.h"
 	"ins_decoder.h"
 	<stdint.h>
 
-1493449775 c:\users\zhufeng\desktop\architecture project2\pipeline_simulator\five_stages.h
+1493738569 c:\users\zhufeng\desktop\architecture project2\pipeline_simulator\five_stages.h
 	<stdio.h>
 	"io.h"
 
@@ -96,17 +96,17 @@
 1493445681 c:\users\zhufeng\desktop\architecture project2\pipeline_simulator\ins_decoder.h
 	"io.h"
 
-1493449813 source:c:\users\zhufeng\desktop\architecture project2\pipeline_simulator\ins_decoder.cpp
+1493734727 source:c:\users\zhufeng\desktop\architecture project2\pipeline_simulator\ins_decoder.cpp
 	"ins_decoder.h"
 	"io.h"
 
-1493732575 source:c:\users\zhufeng\desktop\architecture project2\pipeline_simulator\io.cpp
+1493736877 source:c:\users\zhufeng\desktop\architecture project2\pipeline_simulator\io.cpp
 	<stdio.h>
 	<string.h>
 	"io.h"
 	"ins_decoder.h"
 
-1493733003 source:c:\users\zhufeng\desktop\architecture project2\pipeline_simulator\main.cpp
+1493739015 source:c:\users\zhufeng\desktop\architecture project2\pipeline_simulator\main.cpp
 	<stdio.h>
 	<stdlib.h>
 	<string>

@@ -38,7 +38,7 @@ extern char ins_type_string[39][10];
 
 extern char forwarding_type_string[3][20];
 
-
+extern int special;
 
 
 void write_back(void);

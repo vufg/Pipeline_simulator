@@ -8,6 +8,7 @@ void write_back(void){
     insType optype;
     optype = get_ins_type(WB);
 
+
     //R type instruction $d = execution_result from EX stage
     if((optype >= ADD && optype <= SRA) ||
        (optype >= MFHI && optype <=MFLO)){
@@ -24,6 +25,7 @@ void write_back(void){
     //load memory data instruction
     if(optype >= ADDI && optype <= LBU){
        register_acess(get_rt(WB), DMWB_result_buffer, 1);
+
 
     }
 
@@ -88,11 +90,23 @@ void data_memory(void){
 
     //I type:
     //do nothing in DM stage
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //desperate about this bug...
+    //if(optype == ADDI)
+      //  DMWB_result_buffer = special;
+
+    //if(cycle >= 23 && cycle <= 30)
+            //printf("DM cycle %d: %d %d\n", cycle, EXDM_result_buffer, optype);
+
     if((optype >= ADDI && optype <= ADDIU) ||
        (optype >= LUI && optype <= SLTI)){
         DMWB_result_buffer = EXDM_result_buffer;
 
     }
+
+
 
     //load data from memory instruction
     if(optype >= LW && optype <= LBU){
@@ -184,7 +198,7 @@ void excution(void){
                              //I type instruction
                              {1,0}, {1,0}, {1,0}, {1,0}, {1,0}, {1,0}, {1,0},
                              //SW SH SB
-                             {1,0}, {1,0}, {1,0},
+                             {1,1}, {1,1}, {1,1},
                              {0,0},
                              {1,0}, {1,0}, {1,0}, {1,0},
                              //BEQ BNE BGTZ
@@ -313,6 +327,7 @@ void excution(void){
 
     case SRA:
         EXDM_result_buffer = IDEX_num2 >> shamt;
+        break;
 
     case JR:
         //do nothing
@@ -361,9 +376,18 @@ void excution(void){
 
     //I type instruction
     case ADDI:
+
+
+
         EXDM_result_buffer = IDEX_num1 + get_immediate_signed(EX);
-        ///overflow detection
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //if(cycle >= 20 && cycle <= 30)
+        //    printf("EX cycle %d: %d %d\n", cycle, EXDM_result_buffer, optype);
+        special = IDEX_num1 + get_immediate_signed(EX);
+
+
         overflow_f(IDEX_num1, get_immediate_signed(EX));
+
         break;
 
     case ADDIU:
@@ -496,8 +520,9 @@ void instruction_decoder(void){
                              {1,0},
                              {1,1}, {1,1},
                              {0,0}, {0,0},
+                             //I
                              {1,0}, {1,0}, {1,0}, {1,0}, {1,0}, {1,0}, {1,0},
-                             {1,0}, {1,0}, {1,0},
+                             {1,1}, {1,1}, {1,1},
                              {0,0},
                              {1,0}, {1,0}, {1,0}, {1,0},
                              //beq bne bgtz
@@ -590,20 +615,11 @@ void instruction_decoder(void){
     }
 
 
-
-
-
-
     if(stall_this_cycle){
         //insert NOP
         ID_EX = 0x00000000;
         return ;
     }
-
-    //printf("cycle: %d\n", cycle);
-
-
-
 
     pc_ID = pc_IF + 4;
 
@@ -677,11 +693,11 @@ void instruction_decoder(void){
         break;
 
     case MFHI:
-        EXDM_result_buffer = hi_access(0,0);
+        //EXDM_result_buffer = hi_access(0,0);
         break;
 
     case MFLO:
-        EXDM_result_buffer = lo_access(0,0);
+        //EXDM_result_buffer = lo_access(0,0);
         break;
 
 
@@ -690,6 +706,7 @@ void instruction_decoder(void){
     case ADDI:
         IDEX_num1 = reg_rs;
         //EXDM_result_buffer = IDEX_num1 + get_immediate_signed(EX);
+
         ///overflow detection
 
         break;
@@ -828,11 +845,11 @@ void instruction_decoder(void){
 
     case JUMP:
         int target_pc;
-        target_pc = (pc_ID >> 28 << 28) | (get_address_unsigned(ID) << 2);
-        if(target_pc != pc_IF){
+        target_pc = (pc_ID  >> 28 << 28) | (get_address_unsigned(ID) << 2);
+        //if(target_pc != pc_IF){
                 IF_to_be_flushed = 1;
 
-        }
+        //}
         pc_ID = target_pc;
 
         break;
@@ -841,10 +858,11 @@ void instruction_decoder(void){
         IDEX_num1 = pc_ID - 4;
         //int target_pc;
         target_pc = (pc_ID >> 28 << 28) | (get_address_unsigned(ID) << 2);
-        if(target_pc != pc_IF){
+        //if(target_pc != pc_IF){
                 IF_to_be_flushed = 1;
 
-        }
+        //
+
         pc_ID = target_pc;
         //EXDM_result_buffer = IDEX_num1;
 
@@ -853,10 +871,10 @@ void instruction_decoder(void){
     case JR:
         //int target_pc;
         target_pc = reg_rs;
-        if(target_pc != pc_IF){
+        //if(target_pc != pc_IF){
                 IF_to_be_flushed = 1;
 
-        }
+        //
         pc_ID = target_pc;
         break;
 

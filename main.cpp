@@ -56,6 +56,7 @@ int error_report[5] = {0};
 int stall_this_cycle, IF_to_be_flushed;
 forwardingType EX_rs_forwarding_tag, EX_rt_forwarding_tag, ID_rs_forwarding_tag, ID_rt_forwarding_tag;
 
+int special;
 
 void init(void){
     for(int i = 0; i < 50; i++){
@@ -115,7 +116,7 @@ void init(void){
 int main()
 {
 
-    if(0){
+    if(1){
         DIR *dir;
         int cnt = 0;
         struct dirent *ent;
