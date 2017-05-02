@@ -1,6 +1,9 @@
 #ifndef IO_H_INCLUDED
 #define IO_H_INCLUDED
 #include <stdio.h>
+#include <string.h>
+#include <string>
+
 typedef enum {ADD,ADDU,SUB,AND,OR,XOR,NOR,NAND,SLT,SLL,SRL,SRA,JR,MULT,MULTU,MFHI,MFLO,ADDI,ADDIU,
               LW,LH,LHU,LB,LBU,SW,SH,SB,LUI,ANDI,ORI,NORI,SLTI,BEQ,BNE,BGTZ,JUMP,JAL,HALT,NOP} insType;
 
@@ -56,5 +59,9 @@ int dmemory_acess(int address, int value, int len, int write_enable);
 void close_output_file(void);
 void open_output_file(void);
 void input_data_file(void);
+
+void open_output_file_test(std::string foldname);
+void input_data_file_test(std::string foldname);
+
 unsigned int change_endian(unsigned int num);
 #endif // IO_H_INCLUDED

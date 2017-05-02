@@ -1,5 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string>
+#include <string.h>
+#include <dirent.h>
 
 #include "io.h"
 #include "five_stages.h"
@@ -111,6 +114,35 @@ void init(void){
 
 int main()
 {
+
+    if(0){
+        DIR *dir;
+        int cnt = 0;
+        struct dirent *ent;
+        std::string filepath = "C:/Users/Zhufeng/Desktop/student_valid_testcase/";
+        if ((dir = opendir(filepath.c_str())) != NULL) {
+            while ((ent = readdir(dir)) != NULL) {
+                cnt++;
+                printf("testcase name:%s\n", ent->d_name);
+                if(strlen(ent->d_name) < 5){
+                    continue;
+                }
+                init();
+                input_data_file_test(ent->d_name);
+                open_output_file_test(ent->d_name);
+
+                printf("begin the simulation\n");
+                simulator();
+
+                close_output_file();
+
+            }
+          closedir (dir);
+        }
+        return 0;
+    }
+
+
     init();
     input_data_file();
     open_output_file();

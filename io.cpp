@@ -10,6 +10,71 @@
 #include "ins_decoder.h"
 
 
+
+void open_output_file_test(std::string foldname){
+    std::string filepath = "C:/Users/Zhufeng/Desktop/student_valid_testcase/";
+    std::string tmp_string;
+
+    tmp_string = filepath + foldname + "/snapshot_mine.rpt";
+    snapshot = fopen(tmp_string.c_str(), "w+");
+
+    tmp_string = filepath + foldname + "/error_dump_mine.rpt";
+    error_dump = fopen(tmp_string.c_str(), "w+");
+}
+
+void input_data_file_test(std::string foldname){
+
+    FILE *iimage_file, *dimage_file;
+    unsigned int inst, num_dimage, num_iimage;
+
+    for(int i = 0; i < 32; i++)
+        reg_changed[i] = 1;
+    hi_changed = 1;
+    lo_changed = 1;
+    pc_changed = 1;
+
+    std::string filepath = "C:/Users/Zhufeng/Desktop/student_valid_testcase/";
+    std::string iimage_name = "/iimage.bin";
+    std::string dimage_name = "/dimage.bin";
+    std::string tmp_string;
+
+    tmp_string = (filepath + foldname  + iimage_name);
+    iimage_file = fopen(tmp_string.c_str(), "rb+");
+
+    tmp_string = (filepath + foldname  + dimage_name);
+    dimage_file = fopen(tmp_string.c_str(), "rb+");
+
+
+    fread(&inst, sizeof(unsigned int), 1, dimage_file);
+    register_acess(29, change_endian(inst), 1);
+
+    fread(&inst, sizeof(unsigned int), 1, dimage_file);
+    num_dimage = change_endian(inst);
+
+
+    for(unsigned int ii = 0; ii < num_dimage; ii++){
+        fread(&inst, sizeof(unsigned int), 1, dimage_file);
+        dmemory_acess(ii * 4, change_endian(inst), 4, 1);
+    }
+
+    fread(&inst, sizeof(unsigned int), 1, iimage_file);
+    pc_IF = change_endian(inst);
+    pc_ID = change_endian(inst);
+    fread(&inst, sizeof(unsigned int), 1, iimage_file);
+    num_iimage = change_endian(inst);
+    for(unsigned int ii = 0; ii < num_iimage; ii++){
+        fread(&inst, sizeof(unsigned int), 1, iimage_file);
+        imemory[pc_IF/4 + ii] = change_endian(inst);
+    }
+
+    fclose(iimage_file);
+    fclose(dimage_file);
+
+    return ;
+
+
+}
+
 unsigned int change_endian(unsigned int num){
     unsigned int ans = 0;
     for(unsigned int i = 0; i < 4; i++){
@@ -66,6 +131,8 @@ void open_output_file(void){
     error_dump = fopen("error_dump.rpt", "w+");
 }
 
+
+
 void close_output_file(void){
     fclose(snapshot);
     fclose(error_dump);
@@ -77,8 +144,15 @@ void close_output_file(void){
 int dmemory_acess(int address, int value, int len, int write_enable){
     //printf("cycle: %d\n",cycle);
     //printf("%d %d %d\n", address, len);
-    if((address < 0 || address + len - 1 > 1023)||(address % len)){
-        if(address < 0 || address + len - 1 > 1023){
+    /*if(cycle == 3010 || cycle == 3009){
+        printf("cycle: %d\n",cycle);
+        printf("%d %d\n", address, len);
+
+    }
+    */
+    if((address < 0 || address + len - 1 > 1023 || address > 1023)||(address % len)){
+
+        if(address < 0 || address + len - 1 > 1023 || address > 1023){
             error_report[2] = 1;
             //fprintf(error_dump , "In cycle %d: Address Overflow\n", cycle);
         }
@@ -228,9 +302,7 @@ void output_snapshot_reg(void){
     }else{
         pc_changed = 0;
     }
-    //if(pc_changed || no_change){
     fprintf(snapshot, "PC: 0x%08X\n", pc_IF);
-    //}
     pre_pc = pc_IF;
 
 }
