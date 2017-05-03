@@ -205,6 +205,7 @@ void excution(void){
                              {0,0}, {0,0}, {0,0},
                              {0,0}, {0,0}, {0,0}, {0,0}
                              };
+    int64_t a,b,c,d;
     int rs, rt, shamt;
     insType optype;
 
@@ -339,13 +340,18 @@ void excution(void){
              //fprintf(error_dump , "In cycle %d: Overwrite HI-LO registers\n", cycle);
 	    }
 	    mul_changed = 1;
-	    long long ans;
+
 	    int tmp;
-	    ans = IDEX_num1 * IDEX_num2;
-	    tmp = ans >> 32;
-	    hi_access( tmp, 1);
-	    tmp = ans;
+	    a = IDEX_num1;
+        b = IDEX_num2;
+        tmp = a * b << 32 >> 32;
 	    lo_access( tmp, 1);
+
+	    tmp = a * b >> 32;
+	    hi_access( tmp, 1);
+	    if( ((unsigned int)IDEX_num1 >> 31) * ((unsigned int)IDEX_num2 >> 31) * ((unsigned int)tmp >> 31) < 0){
+            error_report[4] = 1;
+	    }
         break;
 
     case MULTU:
@@ -353,12 +359,12 @@ void excution(void){
             error_report[1] = 1;
 	    }
 	    mul_changed = 1;
-	    int64_t a,b,c,d;
+
         int e,f;
         a = (unsigned int)IDEX_num1;
         b = (unsigned int)IDEX_num2;
-        c = ((int64_t)( a * b)) >> 32;
-        d = ((int64_t)( a * b)) << 32 >> 32;
+        c = ((unsigned int64_t)( a * b)) >> 32;
+        d = ((unsigned int64_t)( a * b)) << 32 >> 32;
         e = c;
         f = d;
 	    hi_access(e,1);
@@ -808,10 +814,10 @@ void instruction_decoder(void){
         if(reg_rs == reg_rt){
             int target_pc = pc_ID + (get_immediate_signed(ID) << 2) - 4;
             overflow_f(pc_ID, get_immediate_signed(ID) << 2);
-            if(target_pc != pc_IF){
-                IF_to_be_flushed = 1;
+            //if(target_pc != pc_IF){
+            IF_to_be_flushed = 1;
 
-            }
+            //}
             pc_ID = target_pc;
         }
 
@@ -821,10 +827,10 @@ void instruction_decoder(void){
         if(reg_rs != reg_rt){
             int target_pc = pc_ID + (get_immediate_signed(ID) << 2) - 4;
             overflow_f(pc_ID, get_immediate_signed(ID) << 2);
-            if(target_pc != pc_IF){
-                IF_to_be_flushed = 1;
+            //if(target_pc != pc_IF){
+            IF_to_be_flushed = 1;
 
-            }
+            //}
             pc_ID = target_pc;
         }
 
@@ -834,10 +840,10 @@ void instruction_decoder(void){
         if(reg_rs > 0){
             int target_pc = pc_ID + (get_immediate_signed(ID) << 2) - 4;
             overflow_f(pc_ID, get_immediate_signed(ID) << 2);
-            if(target_pc != pc_IF){
-                IF_to_be_flushed = 1;
+            //if(target_pc != pc_IF){
+            IF_to_be_flushed = 1;
 
-            }
+            //}
             pc_ID = target_pc;
         }
 

@@ -79,7 +79,7 @@
 1493537356 source:c:\users\zhufeng\desktop\pipeline_simulator\simulator.cpp
 	"simulator.h"
 
-1493739378 source:c:\users\zhufeng\desktop\architecture project2\pipeline_simulator\five_stages.cpp
+1493811184 source:c:\users\zhufeng\desktop\architecture project2\pipeline_simulator\five_stages.cpp
 	"five_stages.h"
 	"ins_decoder.h"
 	<stdint.h>
